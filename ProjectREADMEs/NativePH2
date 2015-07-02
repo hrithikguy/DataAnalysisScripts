@@ -1,0 +1,23 @@
+nativecombined.sdf, FINALOUTPUT and pHcombined.sdf were copied from Part1 folder.
+
+nativerefractivity: produced by "cxcalc refractivity nativecombined.sdf | awk '{print $2}' > native refractivity"
+
+pHrefractivity: created by "cxcalc refractivity pHcombined.sdf | awk '{print $2}' > pHrefractivity"
+
+firstsixcolumns: produced by "paste FINALOUTPUT nativerefractivity pHrefractivity > firstsixcolumns"
+
+massandrefractivity: produced by awk 'NF > 0 {print $1, $2, $3, $4, $5, $6, ($6 - $5)}' firstsixcolumns > massandrefractivity
+
+nativelogd and pHlogd - created similarly to native refractivity and pHrefractivity
+
+firstninecolumns: produced by "paste massandrefractivity nativelogd pHlogd > firstninecolumns"
+
+FINALOUTPUT2: produced by "awk 'NF > 0 {print $1, $2, $3, $4, $5, $6, $7, $8, $9, ($9 - $8)}' firstninecolumns> FINALOUTPUT2
+
+diffvalues: the 1, 4, 7, and 10th columns of FINALOUTPUT2 - shows the difference between the calculated values for all these molecules.
+
+grep -v "0 0 0" diffvalues > diffvaluesnotallzero
+
+awk '$2 == "0"' diffvaluesnotallzero > relevantmolecules
+
+I then opened each of the sdf files (native and ph) of each of the 12 molecules in relevantmolecules and the results are in "FINALSTRUCTURENOTES"
