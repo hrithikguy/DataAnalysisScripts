@@ -1,0 +1,13 @@
+
+Ene_DFT_Ele.dat : file given by Longzhu
+Enefiles.txt : first column of Ene_DFT_Ele.dat
+filenames.txt : filenames in BDE folder
+filesandvalues.txt : first column - files in BDE folder, second column - part1 values
+finalsummaryfile.txt : result of part1
+atomicnumbers: numbers extracted from finalsummaryfile.txt, by the command cat finalsummaryfile.txt | gawk 'match($0,/([0-9]+)H/,  ary) {print ary['${2:-'0'}']}' | gawk 'match($0, /([0-9]+)/, ary) {print ary['${2:-'0'}']}'
+
+lowestnumbers.txt: grepped values from BDE folder for part1. Also second column of filesandvalues.txt
+
+Ignore the folder "Old"
+Folder "NewPart2" is the folder for Part 2
+Folder "Part3" is the folder for Part 3
