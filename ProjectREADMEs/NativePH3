@@ -1,0 +1,70 @@
+matcharges: awk '{print $1, $3, $4}' ToxCastII_CAS_3D_MV.mat > ChargeJob/matcharges, contains the 1st, 3rd and 4th columns from the .mat file
+
+nativeswithzerocharge: grep -L "CHG" * > ../ChargeJob/nativeswithzerocharge, contains the native filenames of those with no "CHG" found
+
+nativeswithnonzerocharge: grep -l "CHG" * > ../ChargeJob/nativeswithnonzerocharge, contains the native filenames of those with "CHG" found
+
+nativenonzerovalues: grep "CHG" * > ../ChargeJob/nativenonzerovalues
+
+nativevaluesintermediate: awk '{$1=$2=""; print $0}' nativenonzerovalues > nativevaluesintermediate
+
+main.c  - C program to extract charges
+
+nativenonzerocharges: generated from ./a.out
+
+nativelistpart1: paste nativeswithnonzerocharge nativenonzerocharges > nativelistpart1 
+
+nativelistpart2: awk '{print $1, "0"}' nativeswithzerocharge > nativelistpart2
+
+nativelist: cat nativelistpart1 nativelistpart2 > nativelist
+
+finalnativelist: awk '{ gsub("_native_min.sdf", ""); print}' nativelist > finalnativelist
+
+all the files starting with "pH" were created the same way.
+
+///////////////THIS IS OLD///////////////////////////
+in the createfinal folder, I sorted all three lists by their first column, removed the two extra files in the mat charges files, and then pasted all the files together as required. This folder is where the final results for the job are in
+
+[Aditya@MoDRN createfinal]$ diff ph2 mat2
+452a453
+> 134523-03-8
+1711a1713
+> NOCAS_48176
+
+I deleted these two files from the mat charges file to create the lists, because they are not present in the sdf charge files (either native or ph073)
+
+sort -k1 finalnativelist > sortednative
+sort -k1 finalpHlist > sortedpH
+awk '{print $1, $2}' matcharges > matprefix
+awk '{print $2}' sortednative > sortednativevalues
+awk '{print $2}' sortedpH > sortedpHvalues
+paste matprefix sortednativevalues > nativealmostdone
+awk '{print $1, $3, $2, $2 - $3}' nativealmostdone > FINALNATIVE
+awk '{print $1, $3, $2, $2 - $3}' pHalmostdone > FINALPH
+^note the interchange of the third and second columns, this means that the columns are in the correct order as requested (sdf in 2nd columns, mat in 3rd columns)
+//////////////END OF OLD////////////////////////////////
+
+
+The folder "FINAL" is where the real final outputs are
+The folder started with finalnativelist, finalpHlist, and matcharges
+(the two files 452a453
+> 134523-03-8
+1711a1713
+> NOCAS_48176 were removed from matcharges for the same reasons described in the "OLD" section)
+
+The following commands show the pipeline to FINALPH and FINALNATIVE
+
+sort -k1 matcharges > sortedmatcharges
+awk '{print $1, $2}' sortedmatcharges > nativematprefix
+awk '{print $1, $3}' sortedmatcharges > pHmatprefix
+sort -k1 finalnativelist > sortednative
+sort -k1 finalpHlist > sortedpH
+awk '{print $2}' sortednative > sortednativevalues
+awk '{print $2}' sortedpH > sortedpHvalues
+paste nativematprefix sortednativevalues > nativealmostdone
+paste pHmatprefix sortedpHvalues > pHalmostdone
+awk '{print $1, $3, $2, $2 - $3}' nativealmostdone > FINALNATIVE
+awk '{print $1, $3, $2, $2 - $3}' pHalmostdone > FINALPH
+
+FINALNATIVE and FINALPH are the final results of the "Charge Job".
+
