@@ -1,0 +1,7 @@
+nativecombined.sdf : created by cat *.sdf > ../Part1/nativecombined.sdf
+pHcombined.sdf : created by cat *.sdf > ../Part1/pHcombined.sdf
+nativemasses: created by "cxcalc mass nativecombined.sdf | awk '{print $2}' > nativemasses" and deleting the first row
+pHmasses was created the same way as nativemasses
+filenames: created by "ls /home/Aditya/Project_Native_pH073/Native_SDF/ | awk '{gsub("_native_min.sdf", ""); print}' > filenames"
+FINALOUTPUT: created by "awk 'NF > 0 {print $1, $2, $3, ($3 - $2) }' firstthreecolumns > FINALOUTPUT" and then adding the column names in vim
+firstthreecolumns: created by "paste filenames nativemasses pHmasses > firstthreecolumns"`
