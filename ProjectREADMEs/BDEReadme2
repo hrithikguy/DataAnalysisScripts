@@ -1,0 +1,8 @@
+
+main.c: C program used to solve Part 2
+Ene.txt: File given by Longzhu, converted to .txt format
+atomicnumbers: copied from TempBDE directory
+part1: first column - file names without "_native", second column - part1 values
+part1input: created by paste part1 atomicnumbers > part1input
+a.out: executable of C program
+FINAL: output of a.out, final result for part2
