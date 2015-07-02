@@ -1,16 +1,15 @@
 #!/bin/bash
 
-
 for dir in `ls /home/Aditya/BDE`; do
-        cd $dir;
-        values="$(for file in *;do
+	cd $dir;
+    	values="$(for file in *;do
         grep "SCF Done" $file | tail --lines=1| awk '{print $5}' ;
         done)";
 
-        index="$(for i in ${values[@]}; do echo $i; done | sort -g | head -1)";
+	index="$(for i in ${values[@]}; do echo $i; done | nl | sort -g -k2,2 | awk '{print $1}' | head -1)";
 
-        echo $index;
 
-        cd ../;
-
+	files=(*);
+	echo "${files[index-1]}";
+	cd ../;
  done
